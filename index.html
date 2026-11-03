@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viaje Mais — Pacotes de Viagem</title>
+<style>
+:root{--pri:#0b6e99;--sec:#ff7a45;--esc:#10283a;--claro:#f4f8fb;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--esc);background:#fff;line-height:1.5}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:auto;padding:0 20px}
+header{position:sticky;top:0;background:#fff;box-shadow:0 2px 10px #0001;z-index:50}
+nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-size:1.5rem;font-weight:800;color:var(--pri)}.logo span{color:var(--sec)}
+.menu{display:flex;gap:26px;font-weight:500}
+.menu a:hover{color:var(--pri)}
+.btn{background:var(--sec);color:#fff;border:0;padding:12px 22px;border-radius:999px;font-weight:700;cursor:pointer;font-size:1rem}
+.btn:hover{filter:brightness(.93)}
+.btn.out{background:transparent;border:2px solid var(--pri);color:var(--pri)}
+.carrinho-btn{position:relative;background:var(--pri)}
+.badge{position:absolute;top:-6px;right:-6px;background:var(--sec);border-radius:50%;width:22px;height:22px;font-size:.75rem;display:grid;place-items:center}
+.hero{background:linear-gradient(135deg,#0b6e99dd,#10283add),linear-gradient(120deg,#5fc3e4,#0b6e99);color:#fff;padding:90px 0 120px;text-align:center}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;margin-bottom:14px}
+.hero p{font-size:1.15rem;opacity:.9;margin-bottom:34px}
+.busca{background:#fff;border-radius:var(--r);padding:16px;display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;max-width:900px;margin:auto;box-shadow:0 15px 40px #0003}
+.busca input,.busca select,form input,form select,form textarea{width:100%;padding:12px 14px;border:1px solid #d5e0e8;border-radius:10px;font-size:1rem;font-family:inherit}
+section{padding:70px 0}
+.titulo{text-align:center;margin-bottom:40px}
+.titulo h2{font-size:2rem}.titulo p{color:#5b6b78}
+.filtros{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+.filtro{padding:9px 18px;border-radius:999px;border:1px solid #cfdbe4;background:#fff;cursor:pointer;font-weight:600}
+.filtro.ativo{background:var(--pri);color:#fff;border-color:var(--pri)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:26px}
+.card{border-radius:var(--r);overflow:hidden;box-shadow:0 6px 24px #0b6e991a;transition:.25s;background:#fff;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-6px);box-shadow:0 14px 34px #0b6e992e}
+.img{height:190px;display:grid;place-items:center;font-size:4.5rem;position:relative}
+.tag{position:absolute;top:12px;left:12px;background:var(--sec);color:#fff;font-size:.78rem;font-weight:700;padding:4px 10px;border-radius:999px}
+.corpo{padding:18px;flex:1;display:flex;flex-direction:column}
+.corpo h3{font-size:1.2rem}
+.info{color:#5b6b78;font-size:.9rem;margin:6px 0 12px}
+.inclui{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.inclui span{background:var(--claro);font-size:.78rem;padding:3px 9px;border-radius:6px}
+.preco{margin-top:auto;display:flex;align-items:end;justify-content:space-between}
+.preco small{color:#8a99a5;text-decoration:line-through;display:block}
+.preco b{font-size:1.45rem;color:var(--pri)}
+.preco em{font-style:normal;font-size:.8rem;color:#5b6b78;display:block}
+.vant{background:var(--claro)}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;text-align:center}
+.vgrid div{background:#fff;padding:28px;border-radius:var(--r)}
+.vgrid i{font-style:normal;font-size:2.4rem}
+.vgrid h4{margin:10px 0 4px}
+.dep{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.dep blockquote{background:var(--claro);padding:24px;border-radius:var(--r);border-left:4px solid var(--sec)}
+.dep cite{display:block;margin-top:10px;font-weight:700;font-style:normal}
+.contato{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+form{display:grid;gap:12px}
+footer{background:var(--esc);color:#c9d6e0;padding:40px 0;text-align:center;font-size:.92rem}
+.modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.on{display:flex}
+.caixa{background:#fff;border-radius:var(--r);max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:28px;position:relative}
+.fechar{position:absolute;top:12px;right:16px;background:none;border:0;font-size:1.8rem;cursor:pointer}
+.item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #e6edf2;gap:10px}
+.qtd button{width:28px;height:28px;border-radius:50%;border:1px solid #cfdbe4;background:#fff;cursor:pointer}
+.total{font-size:1.3rem;font-weight:800;text-align:right;margin:16px 0}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--esc);color:#fff;padding:14px 24px;border-radius:999px;transition:.3s;z-index:200}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.vazio{text-align:center;color:#5b6b78;grid-column:1/-1;padding:40px}
+@media(max-width:800px){.menu{display:none}.busca{grid-template-columns:1fr}.contato{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap"><nav>
+  <a href="#" class="logo">Viaje<span>Mais</span></a>
+  <div class="menu"><a href="#pacotes">Pacotes</a><a href="#vantagens">Por que nós</a><a href="#depoimentos">Depoimentos</a><a href="#contato">Contato</a></div>
+  <button class="btn carrinho-btn" onclick="abrirCarrinho()">🧳 Carrinho <span class="badge" id="badge">0</span></button>
+</nav></div></header>
+
+<div class="hero"><div class="wrap">
+  <h1>Sua próxima viagem começa aqui</h1>
+  <p>Pacotes completos com aéreo, hotel e passeios — parcelados em até 12x sem juros</p>
+  <div class="busca">
+    <input id="q" placeholder="Para onde você quer ir?" oninput="render()">
+    <select id="ordem" onchange="render()">
+      <option value="">Ordenar por</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="dias">Duração</option>
+    </select>
+    <select id="teto" onchange="render()">
+      <option value="">Qualquer preço</option><option value="3000">Até R$ 3.000</option><option value="6000">Até R$ 6.000</option><option value="10000">Até R$ 10.000</option>
+    </select>
+    <button class="btn" onclick="document.getElementById('pacotes').scrollIntoView({behavior:'smooth'})">Buscar</button>
+  </div>
+</div></div>
+
+<section id="pacotes"><div class="wrap">
+  <div class="titulo"><h2>Pacotes em destaque</h2><p>Valores por pessoa, em quarto duplo</p></div>
+  <div class="filtros" id="filtros"></div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section class="vant" id="vantagens"><div class="wrap">
+  <div class="titulo"><h2>Por que viajar com a gente</h2></div>
+  <div class="vgrid">
+    <div><i>💳</i><h4>12x sem juros</h4><p>Parcele no cartão ou pague no Pix com 5% de desconto</p></div>
+    <div><i>🛡️</i><h4>Compra segura</h4><p>Agência cadastrada no Cadastur e seguro viagem incluso</p></div>
+    <div><i>📞</i><h4>Suporte 24h</h4><p>Atendimento por WhatsApp antes, durante e depois da viagem</p></div>
+    <div><i>🔄</i><h4>Remarcação flexível</h4><p>Altere a data sem multa até 30 dias antes do embarque</p></div>
+  </div>
+</div></section>
+
+<section id="depoimentos"><div class="wrap">
+  <div class="titulo"><h2>Quem viajou, recomenda</h2></div>
+  <div class="dep">
+    <blockquote>"Tudo organizado do início ao fim. O hotel em Gramado superou as expectativas!"<cite>⭐⭐⭐⭐⭐ Mariana S.</cite></blockquote>
+    <blockquote>"Atendimento rápido pelo WhatsApp e preço melhor do que encontrei sozinho."<cite>⭐⭐⭐⭐⭐ Rafael T.</cite></blockquote>
+    <blockquote>"Nossa lua de mel em Cancún foi perfeita. Já estamos planejando a próxima."<cite>⭐⭐⭐⭐⭐ Júlia e Pedro</cite></blockquote>
+  </div>
+</div></section>
+
+<section class="vant" id="contato"><div class="wrap contato">
+  <div>
+    <h2 style="font-size:2rem;margin-bottom:10px">Quer um pacote personalizado?</h2>
+    <p style="color:#5b6b78;margin-bottom:20px">Conte para onde quer ir e nossa equipe monta um roteiro sob medida em até 24 horas.</p>
+    <p>📱 (11) 99999-9999<br>✉️ contato@viajemais.com.br<br>📍 Av. Paulista, 1000 — São Paulo/SP</p>
+  </div>
+  <form onsubmit="enviarContato(event)">
+    <input required placeholder="Seu nome" id="cNome">
+    <input required type="email" placeholder="Seu e-mail">
+    <input required placeholder="WhatsApp">
+    <input placeholder="Destino desejado">
+    <textarea rows="4" placeholder="Datas, número de pessoas, preferências..."></textarea>
+    <button class="btn">Solicitar orçamento</button>
+  </form>
+</div></section>
+
+<footer><div class="wrap">
+  <p class="logo" style="margin-bottom:8px">Viaje<span>Mais</span></p>
+  <p>© 2026 Viaje Mais Turismo LTDA · CNPJ 00.000.000/0001-00 · Cadastur 00.000000.00.0000-0</p>
+</div></footer>
+
+<div class="modal" id="mDet"><div class="caixa" id="det"></div></div>
+
+<div class="modal" id="mCar"><div class="caixa">
+  <button class="fechar" onclick="fechar('mCar')">×</button>
+  <h2>Seu carrinho</h2>
+  <div id="itens"></div>
+  <div class="total" id="total"></div>
+  <form id="fCheckout" onsubmit="finalizar(event)">
+    <input required id="nome" placeholder="Nome completo">
+    <input required id="tel" placeholder="WhatsApp">
+    <input required id="data" type="date">
+    <select id="pag"><option>Pix (5% de desconto)</option><option>Cartão de crédito — 12x sem juros</option><option>Boleto</option></select>
+    <button class="btn">Finalizar pelo WhatsApp</button>
+  </form>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CONFIGURAÇÃO: troque pelo número da sua agência (DDI+DDD+número) =====
+const WHATSAPP = "5511999999999";
+
+const pacotes = [
+  {id:1,nome:"Rio de Janeiro",cat:"Nacional",emoji:"🏖️",cor:"#5fc3e4,#0b6e99",dias:5,de:3290,por:2490,tag:"Mais vendido",inclui:["Aéreo","Hotel 4★","Café","Cristo Redentor"],desc:"Cristo Redentor, Pão de Açúcar, Copacabana e passeio de escuna por Angra."},
+  {id:2,nome:"Gramado e Canela",cat:"Nacional",emoji:"🌲",cor:"#8bc34a,#33691e",dias:4,de:3100,por:2690,tag:"",inclui:["Aéreo","Hotel 4★","Café","Fondue"],desc:"Lago Negro, Snowland, Catedral de Pedra e noite de fondue."},
+  {id:3,nome:"Porto de Galinhas",cat:"Nacional",emoji:"🐠",cor:"#26c6da,#00838f",dias:7,de:4200,por:3390,tag:"-19%",inclui:["Aéreo","Resort all inclusive","Transfer"],desc:"Piscinas naturais, jangada e praias de Muro Alto e Carneiros."},
+  {id:4,nome:"Foz do Iguaçu",cat:"Nacional",emoji:"💦",cor:"#4db6ac,#00695c",dias:4,de:2600,por:1990,tag:"Oferta",inclui:["Aéreo","Hotel 3★","Cataratas"],desc:"Cataratas brasileiras e argentinas, Itaipu e Parque das Aves."},
+  {id:5,nome:"Buenos Aires",cat:"América do Sul",emoji:"💃",cor:"#90caf9,#1565c0",dias:5,de:4500,por:3790,tag:"",inclui:["Aéreo","Hotel 4★","Show de tango"],desc:"Caminito, Puerto Madero, Recoleta e jantar com show de tango."},
+  {id:6,nome:"Santiago e Valle Nevado",cat:"América do Sul",emoji:"🏔️",cor:"#b0bec5,#37474f",dias:6,de:6200,por:5290,tag:"Neve",inclui:["Aéreo","Hotel 4★","Vinícola","Neve"],desc:"Dia na neve em Valle Nevado e degustação na Concha y Toro."},
+  {id:7,nome:"Cancún",cat:"Internacional",emoji:"🌴",cor:"#ffb74d,#e65100",dias:7,de:9800,por:8490,tag:"Lua de mel",inclui:["Aéreo","All inclusive","Transfer","Seguro"],desc:"Resort pé na areia, Chichén Itzá e Isla Mujeres."},
+  {id:8,nome:"Lisboa e Porto",cat:"Internacional",emoji:"🚋",cor:"#ffd54f,#f57f17",dias:10,de:12900,por:10990,tag:"",inclui:["Aéreo","Hotéis 4★","Trem","Seguro"],desc:"Belém, Alfama, Sintra, Ribeira e vinícolas do Douro."},
+  {id:9,nome:"Paris",cat:"Internacional",emoji:"🗼",cor:"#ce93d8,#6a1b9a",dias:8,de:14500,por:12790,tag:"Premium",inclui:["Aéreo","Hotel 4★","Louvre","Seguro"],desc:"Torre Eiffel, Louvre, cruzeiro no Sena e Versalhes."}
+];
+
+let catAtual = "Todos";
+let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const $ = id => document.getElementById(id);
+
+function filtros(){
+  const cats = ["Todos",...new Set(pacotes.map(p=>p.cat))];
+  $("filtros").innerHTML = cats.map(c=>`<button class="filtro ${c===catAtual?'ativo':''}" onclick="catAtual='${c}';filtros();render()">${c}</button>`).join("");
+}
+
+function render(){
+  const q = $("q").value.toLowerCase(), teto = +$("teto").value || Infinity, o = $("ordem").value;
+  let lista = pacotes.filter(p => (catAtual==="Todos"||p.cat===catAtual) && p.por<=teto &&
+    (p.nome+p.desc+p.cat).toLowerCase().includes(q));
+  if(o==="menor") lista.sort((a,b)=>a.por-b.por);
+  if(o==="maior") lista.sort((a,b)=>b.por-a.por);
+  if(o==="dias") lista.sort((a,b)=>a.dias-b.dias);
+  $("grid").innerHTML = lista.length ? lista.map(p=>`
+    <div class="card">
+      <div class="img" style="background:linear-gradient(135deg,${p.cor})">${p.tag?`<span class="tag">${p.tag}</span>`:""}${p.emoji}</div>
+      <div class="corpo">
+        <h3>${p.nome}</h3>
+        <div class="info">📅 ${p.dias} dias · ${p.dias-1} noites · ${p.cat}</div>
+        <div class="inclui">${p.inclui.map(i=>`<span>✓ ${i}</span>`).join("")}</div>
+        <div class="preco">
+          <div><small>${brl(p.de)}</small><b>${brl(p.por)}</b><em>ou 12x de ${brl(p.por/12)}</em></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn out" style="flex:1" onclick="detalhes(${p.id})">Detalhes</button>
+          <button class="btn" style="flex:1" onclick="add(${p.id})">Reservar</button>
+        </div>
+      </div>
+    </div>`).join("") : `<p class="vazio">Nenhum pacote encontrado. Tente outro destino ou fale com a gente!</p>`;
+}
+
+function detalhes(id){
+  const p = pacotes.find(x=>x.id===id);
+  $("det").innerHTML = `<button class="fechar" onclick="fechar('mDet')">×</button>
+    <div class="img" style="background:linear-gradient(135deg,${p.cor});border-radius:10px;margin-bottom:16px">${p.emoji}</div>
+    <h2>${p.nome}</h2><p class="info">📅 ${p.dias} dias / ${p.dias-1} noites · ${p.cat}</p>
+    <p style="margin-bottom:14px">${p.desc}</p>
+    <div class="inclui">${p.inclui.map(i=>`<span>✓ ${i}</span>`).join("")}</div>
+    <div class="preco"><div><small>${brl(p.de)}</small><b>${brl(p.por)}</b><em>por pessoa · 12x de ${brl(p.por/12)}</em></div>
+    <button class="btn" onclick="add(${p.id});fechar('mDet')">Reservar</button></div>`;
+  $("mDet").classList.add("on");
+}
+
+function salvar(){ localStorage.setItem("carrinho",JSON.stringify(carrinho)); $("badge").textContent = carrinho.reduce((s,i)=>s+i.q,0); }
+function add(id){ const i=carrinho.find(x=>x.id===id); i?i.q++:carrinho.push({id,q:1}); salvar(); toast("Pacote adicionado ao carrinho ✈️"); }
+function mudar(id,d){ const i=carrinho.find(x=>x.id===id); i.q+=d; if(i.q<1) carrinho=carrinho.filter(x=>x.id!==id); salvar(); abrirCarrinho(); }
+
+function abrirCarrinho(){
+  if(!carrinho.length){ $("itens").innerHTML='<p class="vazio">Seu carrinho está vazio.</p>'; $("total").textContent=""; $("fCheckout").style.display="none"; }
+  else{
+    $("fCheckout").style.display="grid";
+    $("itens").innerHTML = carrinho.map(i=>{const p=pacotes.find(x=>x.id===i.id);return`
+      <div class="item"><div><b>${p.emoji} ${p.nome}</b><br><small>${brl(p.por)} / pessoa</small></div>
+      <div class="qtd"><button onclick="mudar(${p.id},-1)">−</button> ${i.q} pessoa(s) <button onclick="mudar(${p.id},1)">+</button></div></div>`}).join("");
+    $("total").textContent = "Total: " + brl(totalCarrinho());
+  }
+  $("mCar").classList.add("on");
+}
+const totalCarrinho = () => carrinho.reduce((s,i)=>s+pacotes.find(x=>x.id===i.id).por*i.q,0);
+
+function finalizar(e){
+  e.preventDefault();
+  const linhas = carrinho.map(i=>{const p=pacotes.find(x=>x.id===i.id);return`• ${p.nome} — ${i.q} pessoa(s) — ${brl(p.por*i.q)}`}).join("\n");
+  const msg = `Olá! Quero reservar:\n${linhas}\n\nTotal: ${brl(totalCarrinho())}\nNome: ${$("nome").value}\nWhatsApp: ${$("tel").value}\nData de ida: ${$("data").value.split("-").reverse().join("/")}\nPagamento: ${$("pag").value}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+  carrinho=[]; salvar(); fechar("mCar"); toast("Pedido enviado! Responderemos em instantes.");
+}
+
+function enviarContato(e){ e.preventDefault(); toast(`Obrigado, ${$("cNome").value}! Entraremos em contato.`); e.target.reset(); }
+function fechar(id){ $(id).classList.remove("on"); }
+function toast(t){ const el=$("toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),2600); }
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{ if(e.target===m) m.classList.remove("on"); }));
+$("data").min = new Date().toISOString().split("T")[0];
+
+filtros(); render(); salvar();
+</script>
+</body>
+</html>
